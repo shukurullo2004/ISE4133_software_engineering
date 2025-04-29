@@ -5,20 +5,17 @@ import time
 import datetime
 
 from weather import display_weather_info
-
-import os
-from dotenv import load_dotenv
-load_dotenv()
+import config
 
 # API configuration
 gemini_api_url = "https://generativelanguage.googleapis.com/v1beta"
-gemini_api_key =  os.getenv('GEMINI_API_KEY')
+gemini_api_key =  config.GEMINI_API_KEY
 
 # OpenStreetMap APIs (for geocoding and directions) - free alternatives
 nominatim_url = "https://nominatim.openstreetmap.org/search"
 osrm_url = "http://router.project-osrm.org/route/v1"
 
-openweather_api_key = os.getenv('OPENWEATHER_API_KEY')
+openweather_api_key = config.OPENWEATHER_API_KEY
 
 
 def geocoding(location, key=None):
