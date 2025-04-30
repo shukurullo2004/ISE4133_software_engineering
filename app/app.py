@@ -7,12 +7,10 @@ from textual.screen import Screen
 from textual.reactive import reactive
 from asyncio import sleep
 
+from loading_screen import LoadingScreen
+
 class MyApp(App):
-    CSS = """
-    .bold-label {
-        text-style: bold;
-    }
-    """
+    CSS_PATH = 'static/app.tcss'
 
     TITLE = "MyDirection"
     BINDINGS = [Binding("q", "quit", "Quit")]

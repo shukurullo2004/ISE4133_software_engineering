@@ -1,6 +1,6 @@
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.widgets import Header, Footer, ProgressBar, Label
+from textual.widgets import Header, Footer, ProgressBar, Label, Button
 from textual.containers import Center, Middle, Vertical, Container
 from textual.screen import Screen
 from textual.reactive import reactive
@@ -23,34 +23,49 @@ class LoadingScreen(Screen):
         with Container(id="log-area"):
             with Center():
                 with Middle():
-                    # I know it looks horrible but i tried a lot
-                    # and failed a lot, and ran out of patience
-                    # to make smth smart, DON'T JUDGE!!!
-                    yield Label("Loading...", classes='bold-label')
-                    if check_connection():
+                # I know it looks horrible but i tried a lot
+                # and failed a lot, and ran out of patience
+                # to make smth smart, DON'T JUDGE!!!
+                    yield Label("Status:", classes='bold-label')
+                    if not check_connection():
+                        msg = "❌ " + steps[0] 
+                        yield Label(msg)
+                    else: 
                         msg = "🟢 " + steps[0]
-                    else: 
-                        msg = "❌ " + steps[0]
-                    yield Label(msg)
-                    if check_osm():
-                        msg = "🟢 " + steps[1]
-                    else: 
-                        msg = "❌ " + steps[1]
-                    yield Label(msg)
-                    gemini = check_gemini()
-                    if gemini[0]:
-                        msg = f"🟢 {steps[2]}: {gemini[2]}"
-                    else: 
-                        msg = "❌ " + steps[2]
-                    yield Label(msg)
-                    # If only you knew how hard it was to get the loading screen running...
-                    # problem was that waiting is really tricky,  beacause it blocks some main threads
-                    # I swear, async/await is not possible to implement here, at least I couldn't [:ver-sad-face:]
+                        yield Label(msg)
 
-    def on_ready(self):
-       
-        self.app.pop_screen()        
+                        if not check_osm():
+                            msg = "❌ " + steps[1]
+                            yield Label(msg)
+                        else: 
+                            msg = "🟢 " + steps[1]
+                            yield Label(msg)
 
+                            gemini = check_gemini()
+                            if not gemini[0]:
+                                msg = "❌ " + steps[2]
+                                yield Label(msg)
+                                yield Button("Continue\n (without AI)", id="continue-btn", classes="minimal-button")
+                                yield Button("Quit", id="quit-btn", classes="minimal-button", variant="error")
+                            else: 
+                                msg = f"🟢 {steps[2]}: {gemini[1]}"
+                                yield Label(msg)
+
+                                # All good: Show continue button
+                                yield Button("Continue", id="continue-btn", classes="minimal-button")
+
+                # If only you knew how hard it was to get the loading screen running...
+                # problem was that waiting is really tricky,  beacause it blocks some main threads
+                # I swear, async/await is not possible to implement here, at least I couldn't [:verry-sad-face:]
+
+    # def on_ready(self):
+    #     self.app.pop_screen()        
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "continue-btn":
+            self.app.pop_screen()
+        if event.button.id == "quit-btn":
+            self.app.exit() 
 
 
 class MyApp(App):
@@ -59,8 +74,14 @@ class MyApp(App):
         text-style: bold;
         padding-bottom: 1;
     }
-    """
+    
+    .minimal-button {
+        margin: 1;
+        border: round grey;    
+        content-align: center middle;
+    }
 
+    """
     TITLE = "MyDirection"
     BINDINGS = [Binding("q", "quit", "Quit")]
 
