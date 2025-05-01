@@ -34,7 +34,6 @@ MarkdownH2 {
 
 Screen {
     align: center middle;
-    padding: 1;
 }
 
 #buttons, .exit-btn {

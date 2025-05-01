@@ -29,7 +29,7 @@ class MainScreen(Screen):
                 yield Markdown("tts here")
             with VerticalScroll(id="weather"):
                 yield Markdown("weather here")
-
+        
     def on_button_pressed(self, event: Button.Pressed) -> None:
         self.query_one(ContentSwitcher).current = event.button.id  
 
