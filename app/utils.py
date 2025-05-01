@@ -398,6 +398,7 @@ def display_directions(directions_data, origin, destination, mode, enhanced_info
 
     return summary + "\n" + "\n".join(directions)
 
+# I changed the prompt to AI to make it better
 def enhance_directions_with_gemini(origin, destination, mode, directions_data, key, model=None) -> str:
     """
     Enhance directions with travel tips and local insights via Gemini API.
