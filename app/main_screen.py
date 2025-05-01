@@ -15,7 +15,7 @@ class MainScreen(Screen):
     def __init__(self, args):
         super().__init__()
         data = get_things_done(args)
-        
+
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -30,15 +30,19 @@ class MainScreen(Screen):
         with Horizontal(id="buttons"):  
             yield Button("Route", id="route")  
             yield Button("Travel tips", id="travel-tips")
-            yield Button("Weather", id="weather")  
+            yield Button("Weather📍", id="weather1")  
+            yield Button("Weather🎯", id="weather2")  
+
 
         with ContentSwitcher(initial="route"):  
             with VerticalScroll(id="route"):
-                yield Markdown("route here")
+                yield Markdown(self.data['route'])
             with VerticalScroll(id="travel-tips"):
-                yield Markdown("tts here")
-            with VerticalScroll(id="weather"):
-                yield Markdown("weather here")
+                yield Markdown(self.data['gemini-tips'])
+            with VerticalScroll(id="weather1"):
+                yield Markdown(self.data['weather-orig'])
+            with VerticalScroll(id="weather2"):
+                yield Markdown(self.data['weather-dest'])
         
     def on_button_pressed(self, event: Button.Pressed) -> None:
         self.query_one(ContentSwitcher).current = event.button.id  
@@ -47,27 +51,3 @@ class MainScreen(Screen):
         self.app.pop_screen()
         # self.app.push_screen(InputScreen())
 
-# The section below is 
-# used for the ease of Dev/Debug pruposes only
-class MyApp(App):
-    
-    TITLE = "MyDirection"
-    
-    CSS_PATH = 'static/app.tcss'
-
-    def compose(self) -> ComposeResult:
-        yield Header()
-        yield Footer()
-
-    def on_mount(self) -> None:
-        self.push_screen(MainScreen({
-                    'gemini': '',
-                    'transport': '',
-                    'origin-addr': '',
-                    'dest-addr': ''
-                    }))
-
-
-if __name__ == "__main__":
-    app = MyApp()
-    app.run()

@@ -67,22 +67,3 @@ class InputScreen(Screen):
                 if not destAddr[0]:
                     self.query_one('#dest-label', Label).update("Address not found")
                 
-# The section below is 
-# used for the ease of Dev/Debug pruposes only
-class MyApp(App):
-    
-    TITLE = "MyDirection"
-    
-    CSS_PATH = 'static/app.tcss'
-
-    def compose(self) -> ComposeResult:
-        yield Header()
-        yield Footer()
-
-    def on_mount(self) -> None:
-        self.push_screen(InputScreen(''))
-
-
-if __name__ == "__main__":
-    app = MyApp()
-    app.run()
