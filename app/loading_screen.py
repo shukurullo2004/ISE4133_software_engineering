@@ -9,7 +9,7 @@ from utils import check_connection, check_gemini, check_osm
 from input_screen import InputScreen
 steps = [
         "Internet connection",
-        "OpenStreetMap API",
+        "OpenStreetMap APIs",
         "Gemini model",
     ]
 

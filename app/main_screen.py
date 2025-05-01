@@ -14,7 +14,7 @@ class MainScreen(Screen):
     
     def __init__(self, args):
         super().__init__()
-        data = get_things_done(args)
+        self.data = get_things_done(args)
 
 
     def compose(self) -> ComposeResult:

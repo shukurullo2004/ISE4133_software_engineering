@@ -186,7 +186,7 @@ def enhance_directions_with_gemini(origin, destination, mode, directions_data, k
         directions_data (dict): Directions data from OSRM
         key (str): API key for Gemini
         model (str): Gemini model to use (will be determined if None)
-        
+    
     Returns:
         str: Enhanced directions information
     """

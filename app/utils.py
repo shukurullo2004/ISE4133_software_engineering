@@ -40,15 +40,28 @@ def check_osm() -> bool:
     return False
 
 def check_gemini() -> tuple:
-    gemini = list_available_gemini_models(gemini_api_key)
-    if gemini:
-        return True, gemini[0]
+    available_models = list_available_gemini_models(gemini_api_key)
+    # Try to find a suitable model
+    preferred_models = ["gemini-pro", "gemini-1.0-pro", "gemini-1.5-pro", "text-bison", "gemini-1.5-flash"]
+    selected_model = None
+    
+    for preferred in preferred_models:
+        if preferred in available_models:
+            selected_model = preferred
+            break
+            
+    if not selected_model and available_models:
+        # Use the first available model if none of the preferred ones are available
+        selected_model = available_models[0]
+    
+    if selected_model:
+        return True, selected_model
     return False
 
 def check_addr(location, key=None) -> tuple:
     data = geocoding(location, key)
     if (data[0] == 200) and (data[1] != "null"):
-        return True, {"data": data}
+        return True, data
     else: return False, {}
 
 def get_things_done(args):
@@ -60,20 +73,30 @@ def get_things_done(args):
 
     if args['origin-addr'] and args['dest-addr']:
         # Get weather info
-        originWeather = display_weather_info(args['orig-addr'][1], args['orig-addr'][2], openweather_api_key)
+        originWeather = display_weather_info(args['origin-addr'][1], args['origin-addr'][2], openweather_api_key)
         destWeather = display_weather_info(args['dest-addr'][1], args['dest-addr'][2], openweather_api_key)
-
+        
+        config.logger.info("Wether info gathered")
+        
         # Get directions get_directions(origin_lat, origin_lng, dest_lat, dest_lng, mode, key=None)
         directions = get_directions(args['origin-addr'][1], args['origin-addr'][2], 
                                     args['dest-addr'][1], args['dest-addr'][2], 
-                                    mode=args['transport'])
+                                    mode=args['transport'])[1]
         
-        route = display_directions(directions, args['orig-addr'][3], args['orig-addr'][3], args['transport'])
+        config.logger.info("Direction info gathered")
+        
+        route = display_directions(directions, args['origin-addr'][3], args['origin-addr'][3], args['transport'])
+      
+        config.logger.info("Routes info gathered")
 
         if args['gemini'] != '':
             geminiTips = enhance_directions_with_gemini(args['origin-addr'], args['dest-addr'], 
                                                         args['transport'], 
                                                         directions, gemini_api_key, args['gemini'])
+        
+            config.logger.info("Gemini Tips are gathered")
+        else:
+            geminiTips = "No AI tips available."
 
         return {'weather-orig': originWeather, 
                 'weather-dest': destWeather, 
@@ -328,7 +351,7 @@ def display_directions(directions_data, origin, destination, mode, enhanced_info
             config.logger.error(f"Message: {directions_data['message']}")
         return f"❌ Error retrieving directions: {directions_data.get('code', 'Unknown error')}\n" \
                f"{directions_data.get('message', '')}"
-
+    # get
     route = directions_data["routes"][0]
 
     distance_meters = route["distance"]
@@ -404,10 +427,10 @@ def enhance_directions_with_gemini(origin, destination, mode, directions_data, k
 
     # Prompt
     prompt = (
-        """You are enhancing a directions app for end users.
+        f"""You are enhancing a directions app for end users.
 
 They are traveling from {origin} to {destination} by {mode}.  
-The total route is approximately {distance_km:.1f} km ({distance_miles:.1f} miles) and will take about {duration_str}.
+The total route is approximately {distance_km:.1f} km ({distance_mi:.1f} miles) and will take about {duration_str}.
 
 Your response will be shown in a user interface using Markdown formatting. Please provide:
 
