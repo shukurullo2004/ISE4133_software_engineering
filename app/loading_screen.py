@@ -1,13 +1,12 @@
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.widgets import Header, Footer, ProgressBar, Label, Button
-from textual.containers import Center, Middle, Vertical, Container
+from textual.widgets import Header, Footer, Label, Button
+from textual.containers import Center, Middle, Container
 from textual.screen import Screen
-from textual.reactive import reactive
-from asyncio import sleep
+
 
 from utils import check_connection, check_gemini, check_osm
-
+from input_screen import InputScreen
 steps = [
         "Internet connection",
         "OpenStreetMap API",
@@ -64,6 +63,7 @@ class LoadingScreen(Screen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "continue-btn":
             self.app.pop_screen()
+            self.app.push_screen(InputScreen())
         if event.button.id == "quit-btn":
             self.app.exit() 
 

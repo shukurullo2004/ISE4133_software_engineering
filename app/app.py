@@ -8,6 +8,7 @@ from textual.reactive import reactive
 from asyncio import sleep
 
 from loading_screen import LoadingScreen
+from input_screen import InputScreen
 
 class MyApp(App):
     CSS_PATH = 'static/app.tcss'
@@ -21,7 +22,8 @@ class MyApp(App):
 
     async def on_mount(self) -> None:
         await self.push_screen(LoadingScreen())
-
+    
+    
 
 if __name__ == "__main__":
     app = MyApp()

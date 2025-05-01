@@ -1,59 +1,88 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, ProgressBar, Label
-from textual.color import Gradient
-from textual.containers import Center, Middle
-from textual.screen import Screen
-from textual.reactive import reactive
+from textual.containers import Horizontal, VerticalScroll
+from textual.widgets import Button, ContentSwitcher, DataTable, Markdown
 
-gradient = Gradient.from_colors(
-    "#881177", "#aa3355", "#cc6666", "#ee9944", "#eedd00",
-    "#99dd55", "#44dd88", "#22ccbb", "#00bbcc", "#0099cc",
-    "#3366bb", "#663399",
-)
+MARKDOWN_EXAMPLE = """# Three Flavours Cornetto
 
-class LoadingScreen(Screen):
-    progress = reactive(0)
-    step = reactive(0)
+The Three Flavours Cornetto trilogy is an anthology series of British
+comedic genre films directed by Edgar Wright.
 
-    steps = [
-        ("🔌 Checking internet connection...", 25),
-        ("📡 Connecting to OpenStreetMap API...", 50),
-        ("🤖 Loading AI model (Gemini)...", 75),
-        ("✅ Ready to go!", 100),
-    ]
+## Shaun of the Dead
+
+| Flavour | UK Release Date | Director |
+| -- | -- | -- |
+| Strawberry | 2004-04-09 | Edgar Wright |
+
+## Hot Fuzz
+
+| Flavour | UK Release Date | Director |
+| -- | -- | -- |
+| Classico | 2007-02-17 | Edgar Wright |
+
+## The World's End
+
+| Flavour | UK Release Date | Director |
+| -- | -- | -- |
+| Mint | 2013-07-19 | Edgar Wright |
+"""
+
+
+class ContentSwitcherApp(App[None]):
+    CSS = """
+        Screen {
+            align: center middle;
+            padding: 1;
+        }
+
+        #buttons {
+            height: 3;
+            width: auto;
+        }
+
+        ContentSwitcher {
+            border: round $primary;
+            width: 90%;
+            height: 1fr;
+        }
+
+        MarkdownH2 {
+            background: $panel;
+            color: yellow;
+            border: none;
+            padding: 0 1;
+        }
+    """
 
     def compose(self) -> ComposeResult:
-        with Center():
-            with Middle():
-                yield Label("Loading...", id="title-label")
-                yield ProgressBar(total=100, show_eta=False, id="progress-bar", gradient=gradient)
-                yield Label("", id="status-label")
+        with Horizontal(id="buttons"):  
+            yield Button("DataTable", id="data-table")  
+            yield Button("Markdown", id="markdown")  
 
-    def on_ready(self) -> None:
-        # Start updating every 1.5 seconds
-        self.set_interval(1.5, self.next_step)
+        with ContentSwitcher(initial="data-table"):  
+            yield DataTable(id="data-table")
+            with VerticalScroll(id="markdown"):
+                yield Markdown(MARKDOWN_EXAMPLE)
 
-    def next_step(self) -> None:
-        # Only proceed if there are still steps left
-        if self.step < len(self.steps):
-            message, progress = self.steps[self.step]
-            self.query_one("#status-label", Label).update(message)
-            self.query_one("#progress-bar", ProgressBar).progress = progress
-            self.step += 1
-        else:
-            self.app.pop_screen()  # Transition after all steps
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        self.query_one(ContentSwitcher).current = event.button.id  
 
-class MyApp(App):
-    TITLE = "MyDirection"
-    BINDINGS = [("q", "quit", "Quit")]
+    def on_mount(self) -> None:
+        table = self.query_one(DataTable)
+        table.add_columns("Book", "Year")
+        table.add_rows(
+            [
+                (title.ljust(35), year)
+                for title, year in (
+                    ("Dune", 1965),
+                    ("Dune Messiah", 1969),
+                    ("Children of Dune", 1976),
+                    ("God Emperor of Dune", 1981),
+                    ("Heretics of Dune", 1984),
+                    ("Chapterhouse: Dune", 1985),
+                )
+            ]
+        )
 
-    def compose(self) -> ComposeResult:
-        yield Header()
-        yield Footer()
-
-    async def on_mount(self) -> None:
-        await self.push_screen(LoadingScreen())
 
 if __name__ == "__main__":
-    app = MyApp()
-    app.run()
+    ContentSwitcherApp().run()

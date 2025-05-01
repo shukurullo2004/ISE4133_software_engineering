@@ -17,4 +17,5 @@ def check_osm() -> bool:
 def check_gemini() -> tuple:
     return True, 'super-model.v1'
 
-print(check_connection())
+def check_addr(addr) -> tuple:
+    return True, 'some addrs'
