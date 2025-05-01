@@ -1,21 +1,31 @@
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.widgets import Header, Footer, ProgressBar, Label, Button, Input, ContentSwitcher, Markdown
+from textual.widgets import Header, Footer, ProgressBar, Label, Button, Input, ContentSwitcher, Markdown, LoadingIndicator
 from textual.containers import Center, Middle, Vertical, Horizontal, VerticalScroll
 from textual.screen import Screen
 from textual.reactive import reactive
 from asyncio import sleep
 
-from utils import check_addr
-# from main_screen import MainScreen
+from utils import get_things_done
 
 class MainScreen(Screen):
     TITLE = "MyDirection"
     BINDINGS = [Binding("q", "quit", "Quit"), Binding("Esc", "esc_main", "Input screen")]
+    
+    def __init__(self, args):
+        super().__init__()
+        data = get_things_done(args)
+        
 
     def compose(self) -> ComposeResult:
         yield Header()
         yield Footer()
+    #     yield LoadingIndicator(id="loading-container")
+
+    # def on_mount(self):
+    #     check_addr('texas')
+    #     # Load data from APIs
+    #     self.query_one('#loading-indicator', LoadingIndicator).remove()
 
         with Horizontal(id="buttons"):  
             yield Button("Route", id="route")  
@@ -37,6 +47,8 @@ class MainScreen(Screen):
         self.app.pop_screen()
         # self.app.push_screen(InputScreen())
 
+# The section below is 
+# used for the ease of Dev/Debug pruposes only
 class MyApp(App):
     
     TITLE = "MyDirection"
@@ -48,7 +60,12 @@ class MyApp(App):
         yield Footer()
 
     def on_mount(self) -> None:
-        self.push_screen(MainScreen())
+        self.push_screen(MainScreen({
+                    'gemini': '',
+                    'transport': '',
+                    'origin-addr': '',
+                    'dest-addr': ''
+                    }))
 
 
 if __name__ == "__main__":

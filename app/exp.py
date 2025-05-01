@@ -1,88 +1,33 @@
+from textual import on
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, VerticalScroll
-from textual.widgets import Button, ContentSwitcher, DataTable, Markdown
+from textual.widgets import Header, Select
 
-MARKDOWN_EXAMPLE = """# Three Flavours Cornetto
-
-The Three Flavours Cornetto trilogy is an anthology series of British
-comedic genre films directed by Edgar Wright.
-
-## Shaun of the Dead
-
-| Flavour | UK Release Date | Director |
-| -- | -- | -- |
-| Strawberry | 2004-04-09 | Edgar Wright |
-
-## Hot Fuzz
-
-| Flavour | UK Release Date | Director |
-| -- | -- | -- |
-| Classico | 2007-02-17 | Edgar Wright |
-
-## The World's End
-
-| Flavour | UK Release Date | Director |
-| -- | -- | -- |
-| Mint | 2013-07-19 | Edgar Wright |
-"""
+LINES = """I must not fear.
+Fear is the mind-killer.
+Fear is the little-death that brings total obliteration.
+I will face my fear.
+I will permit it to pass over me and through me.""".splitlines()
 
 
-class ContentSwitcherApp(App[None]):
-    CSS = """
-        Screen {
-            align: center middle;
-            padding: 1;
-        }
+class SelectApp(App):
+    CSS = """Screen {
+    align: center top;
+}
 
-        #buttons {
-            height: 3;
-            width: auto;
-        }
-
-        ContentSwitcher {
-            border: round $primary;
-            width: 90%;
-            height: 1fr;
-        }
-
-        MarkdownH2 {
-            background: $panel;
-            color: yellow;
-            border: none;
-            padding: 0 1;
-        }
-    """
+Select {
+    width: 60;
+    margin: 2;
+}"""
 
     def compose(self) -> ComposeResult:
-        with Horizontal(id="buttons"):  
-            yield Button("DataTable", id="data-table")  
-            yield Button("Markdown", id="markdown")  
+        yield Header()
+        yield Select((line, line) for line in LINES)
 
-        with ContentSwitcher(initial="data-table"):  
-            yield DataTable(id="data-table")
-            with VerticalScroll(id="markdown"):
-                yield Markdown(MARKDOWN_EXAMPLE)
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        self.query_one(ContentSwitcher).current = event.button.id  
-
-    def on_mount(self) -> None:
-        table = self.query_one(DataTable)
-        table.add_columns("Book", "Year")
-        table.add_rows(
-            [
-                (title.ljust(35), year)
-                for title, year in (
-                    ("Dune", 1965),
-                    ("Dune Messiah", 1969),
-                    ("Children of Dune", 1976),
-                    ("God Emperor of Dune", 1981),
-                    ("Heretics of Dune", 1984),
-                    ("Chapterhouse: Dune", 1985),
-                )
-            ]
-        )
+    @on(Select.Changed)
+    def select_changed(self, event: Select.Changed) -> None:
+        self.title = str(event.value)
 
 
 if __name__ == "__main__":
-    ContentSwitcherApp().run()
+    app = SelectApp()
+    app.run()

@@ -5,7 +5,7 @@ import time
 import datetime
 
 from weather import display_weather_info
-import config
+import app.config as config
 
 # API configuration
 gemini_api_url = "https://generativelanguage.googleapis.com/v1beta"

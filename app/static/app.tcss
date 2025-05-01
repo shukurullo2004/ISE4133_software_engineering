@@ -44,3 +44,8 @@ Screen {
 .exit-btn {
     align: right top;
 }
+
+Select {
+    width: 30;
+    margin-top: 1;
+}

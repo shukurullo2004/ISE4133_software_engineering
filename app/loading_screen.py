@@ -16,6 +16,10 @@ steps = [
 class LoadingScreen(Screen):
     TITLE = "MyDirection"
 
+    def __init__(self):
+        super().__init__()
+        self.gemini = ''
+
     def compose(self) -> ComposeResult:
         yield Header()
         yield Footer()
@@ -48,6 +52,7 @@ class LoadingScreen(Screen):
                                 yield Button("Quit", id="quit-btn", classes="minimal-button", variant="error")
                             else: 
                                 msg = f"🟢 {steps[2]}: {gemini[1]}"
+                                self.gemini = gemini[1]
                                 yield Label(msg)
 
                                 # All good: Show continue button
@@ -57,33 +62,20 @@ class LoadingScreen(Screen):
                 # problem was that waiting is really tricky,  beacause it blocks some main threads
                 # I swear, async/await is not possible to implement here, at least I couldn't [:verry-sad-face:]
 
-    # def on_ready(self):
-    #     self.app.pop_screen()        
-
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "continue-btn":
             self.app.pop_screen()
-            self.app.push_screen(InputScreen())
+            self.app.push_screen(InputScreen(self.gemini))
         if event.button.id == "quit-btn":
             self.app.exit() 
 
-
+# The section below is 
+# used for the ease of Dev/Debug pruposes only
 class MyApp(App):
-    CSS = """
-    .bold-label {
-        text-style: bold;
-        padding-bottom: 1;
-    }
-    
-    .minimal-button {
-        margin: 1;
-        border: round grey;    
-        content-align: center middle;
-    }
-
-    """
+   
     TITLE = "MyDirection"
     BINDINGS = [Binding("q", "quit", "Quit")]
+    CSS_PATH = 'static/app.tcss'
 
     def compose(self) -> ComposeResult:
         yield Header()

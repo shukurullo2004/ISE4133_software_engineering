@@ -2,3 +2,4 @@ api_keys/
 __pycache__
 myenv
 .env
+*.log
