@@ -68,7 +68,39 @@ To quit the program, type 'q' at any prompt.
 
 Enter a transportation mode from the list above: car
 Starting Location: New York
+
+📍 Weather Report for New York
+
+🌤 Weather: Clear sky
+🌡 Temperature: 14.49°C (Feels like 13.22°C)
+💧 Humidity: 47%
+📈 Pressure: 1023 hPa
+🌊 Sea Level: 1023 hPa
+🏔 Ground Level: 1023 hPa
+
+💨 Wind Speed: 3.09 m/s
+🧭 Wind Direction: 190°
+
+🌅 Sunrise: 18:56:49
+🌇 Sunset: 08:49:38
+
+
 Destination: Boston
+
+📍 Weather Report for Boston
+
+🌤 Weather: Broken clouds
+🌡 Temperature: 11.75°C (Feels like 10.52°C)
+💧 Humidity: 59%
+📈 Pressure: 1023 hPa
+🌊 Sea Level: 1023 hPa
+🏔 Ground Level: 1019 hPa
+
+💨 Wind Speed: 1.34 m/s
+🧭 Wind Direction: 233°
+
+🌅 Sunrise: 18:41:44
+🌇 Sunset: 08:41:06
 
 =================================================
 Directions from New York to Boston by car
@@ -126,6 +158,12 @@ This application uses:
    - For AI-generated information about the journey
    - Requires an API key
    - Documentation: https://ai.google.dev/docs
+
+4. **OpenWeather API**  
+   - For providing real-time weather conditions along the route  
+   - Useful for travel planning and safety alerts  
+   - Requires a free API key from [OpenWeather](https://openweathermap.org/api)  
+   - [Documentation](https://openweathermap.org/current)
 
 ## ⚠️ Limitations
 

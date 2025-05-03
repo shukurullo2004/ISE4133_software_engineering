@@ -4,13 +4,19 @@ import json
 import time
 import datetime
 
+from weather import display_weather_info
+import app.config as config
+
 # API configuration
 gemini_api_url = "https://generativelanguage.googleapis.com/v1beta"
-gemini_api_key = "AIzaSyDwahtFFk8KunjI8gE9Oo21kEvVU25lotA"  # Replace with your Gemini API key
+gemini_api_key =  config.GEMINI_API_KEY
 
 # OpenStreetMap APIs (for geocoding and directions) - free alternatives
 nominatim_url = "https://nominatim.openstreetmap.org/search"
 osrm_url = "http://router.project-osrm.org/route/v1"
+
+openweather_api_key = config.OPENWEATHER_API_KEY
+
 
 def geocoding(location, key=None):
     """
@@ -180,7 +186,7 @@ def enhance_directions_with_gemini(origin, destination, mode, directions_data, k
         directions_data (dict): Directions data from OSRM
         key (str): API key for Gemini
         model (str): Gemini model to use (will be determined if None)
-        
+    
     Returns:
         str: Enhanced directions information
     """
@@ -452,6 +458,15 @@ def main():
         
         # Get origin coordinates
         orig = geocoding(loc1)
+        
+        orig_lat = orig[1]
+        orig_lang = orig[2]
+
+        # Get weather information for the origin location
+        print("Fetching weather information for the starting location...")
+        display_weather_info(orig_lat, orig_lang, openweather_api_key)
+
+
         if orig[1] == "null" or orig[2] == "null":
             print("Could not find the starting location. Please try again.")
             continue  # If geocoding failed, restart the loop
@@ -464,9 +479,16 @@ def main():
         
         # Get destination coordinates
         dest = geocoding(loc2)
+        dest_lat = dest[1]
+        dest_lang = dest[2]
+
         if dest[1] == "null" or dest[2] == "null":
             print("Could not find the destination. Please try again.")
             continue  # If geocoding failed, restart the loop
+
+        # Get weather information for the destination location
+        print("Fetching weather information for the destination location...")
+        display_weather_info(dest_lat, dest_lang, openweather_api_key)
         
         print("=================================================")
         
