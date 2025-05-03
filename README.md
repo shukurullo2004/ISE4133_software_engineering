@@ -3,7 +3,7 @@
 A command-line application that provides enhanced directions using free mapping APIs and Google's Gemini AI.
 quick demo video with detailed explanation :
 ```
-https://drive.google.com/drive/folders/1KDVsXrdu5Y5_b1SuGaC2C1kyw-vvrxpB?usp=sharing
+https://drive.google.com/file/d/1YVd1ZjDeeyeox0CA7NF9UuuEdxxWka5a/view?usp=sharing
 ```
 
 
