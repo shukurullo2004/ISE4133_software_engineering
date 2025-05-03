@@ -1,6 +1,25 @@
 # Enhanced Directions App
 
 A command-line application that provides enhanced directions using free mapping APIs and Google's Gemini AI.
+quick demo video with detailed explanation :
+```
+https://drive.google.com/drive/folders/1KDVsXrdu5Y5_b1SuGaC2C1kyw-vvrxpB?usp=sharing
+```
+
+
+
+presentation :
+```
+https://drive.google.com/drive/folders/1KDVsXrdu5Y5_b1SuGaC2C1kyw-vvrxpB?usp=sharing
+```
+
+This repo for ISE4133_software engineering course
+Team leader:
+12225261 Shukurullo 
+Team members:
+12235608 Daesan
+12225253 Mirsaid
+12214737 Mirjavharbek
 
 ## 🌟 Features
 
@@ -20,8 +39,7 @@ A command-line application that provides enhanced directions using free mapping 
 
 1. Clone this repository:
    ```
-   git clone ...
-   cd ...
+   git clone https://github.com/shukurullo2004/ISE4133_software_engineering.git
    ```
 
 2. Install the required dependencies:
