@@ -14,7 +14,7 @@ TRANSPORT = ["car", "bike", "foot", "driving", "bicycling", "walking"]
 
 class InputScreen(Screen):
     TITLE = "MyDirection"
-    # BINDINGS = [Binding("q", "quit", "Quit")]
+    BINDINGS = [Binding("q", "quit", "Quit")]
 
     def __init__(self, gemini_model):
         super().__init__()

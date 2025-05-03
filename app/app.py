@@ -6,7 +6,7 @@ from textual.containers import Center, Middle
 from textual.screen import Screen
 from textual.reactive import reactive
 from asyncio import sleep
-
+import config
 from loading_screen import LoadingScreen
 from input_screen import InputScreen
 
@@ -22,7 +22,6 @@ class MyApp(App):
 
     async def on_mount(self) -> None:
         await self.push_screen(LoadingScreen())
-    
     
 
 if __name__ == "__main__":

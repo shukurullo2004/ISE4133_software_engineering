@@ -5,12 +5,12 @@ from textual.containers import Center, Middle, Vertical, Horizontal, VerticalScr
 from textual.screen import Screen
 from textual.reactive import reactive
 from asyncio import sleep
-
+import config
 from utils import get_things_done
 
 class MainScreen(Screen):
     TITLE = "MyDirection"
-    BINDINGS = [Binding("q", "quit", "Quit"), Binding("Esc", "esc_main", "Input screen")]
+    BINDINGS = [Binding("q", "quit", "Quit"), Binding("Esc", "esc_main", "Back")]
     
     def __init__(self, args):
         super().__init__()
@@ -47,7 +47,7 @@ class MainScreen(Screen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         self.query_one(ContentSwitcher).current = event.button.id  
 
-    def action_ecs_main(self):
+    def action_esc_main(self):
+        config.logger.info('escape')
         self.app.pop_screen()
-        # self.app.push_screen(InputScreen())
-
+        
