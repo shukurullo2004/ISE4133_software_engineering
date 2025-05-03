@@ -10,29 +10,22 @@ from utils import get_things_done
 
 class MainScreen(Screen):
     TITLE = "MyDirection"
-    BINDINGS = [Binding("q", "quit", "Quit"), Binding("Esc", "esc_main", "Back")]
+    BINDINGS = [Binding("q", "quit", "Quit"),
+                Binding("Esc", "esc_main", "Back")]
     
     def __init__(self, args):
         super().__init__()
         self.data = get_things_done(args)
 
-
     def compose(self) -> ComposeResult:
         yield Header()
         yield Footer()
-    #     yield LoadingIndicator(id="loading-container")
-
-    # def on_mount(self):
-    #     check_addr('texas')
-    #     # Load data from APIs
-    #     self.query_one('#loading-indicator', LoadingIndicator).remove()
-
+    
         with Horizontal(id="buttons"):  
             yield Button("Route", id="route")  
             yield Button("Travel tips", id="travel-tips")
             yield Button("Weather📍", id="weather1")  
             yield Button("Weather🎯", id="weather2")  
-
 
         with ContentSwitcher(initial="route"):  
             with VerticalScroll(id="route"):

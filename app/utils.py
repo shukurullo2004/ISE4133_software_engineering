@@ -85,7 +85,7 @@ def get_things_done(args):
         
         config.logger.info("Direction info gathered")
         
-        route = display_directions(directions, args['origin-addr'][3], args['origin-addr'][3], args['transport'])
+        route = display_directions(directions, args['origin-addr'][3], args['dest-addr'][3], args['transport'])
       
         config.logger.info("Routes info gathered")
 

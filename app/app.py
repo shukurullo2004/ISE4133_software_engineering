@@ -6,13 +6,12 @@ from textual.containers import Center, Middle
 from textual.screen import Screen
 from textual.reactive import reactive
 from asyncio import sleep
-import config
+
 from loading_screen import LoadingScreen
 from input_screen import InputScreen
 
 class MyApp(App):
     CSS_PATH = 'static/app.tcss'
-
     TITLE = "MyDirection"
     BINDINGS = [Binding("q", "quit", "Quit")]
 
